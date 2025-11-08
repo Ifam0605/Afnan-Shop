@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Afnan Motors - Billing & Inventory</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <!-- Navigation Menu -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h1>Afnan Motors</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#inventory" class="nav-link">Inventory</a></li>
+                <li><a href="#sales" class="nav-link">Sales</a></li>
+                <li><a href="#reports" class="nav-link">Reports</a></li>
+                <li><a href="#backup" class="nav-link">Data Management</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Header Section -->
+        <header>
+            <h1>Afnan Motors</h1>
+            <p class="subtitle">Billing & Inventory Management</p>
+        </header>
+
+        <!-- Wheel Management Section -->
+        <section id="inventory" class="wheel-management">
+            <h2>Wheel Management</h2>
+            
+            <!-- Wheel Form -->
+            <form id="wheelForm" class="form">
+                <input type="hidden" id="wheelId" value="">
+                
+                <div class="form-group">
+                    <label for="model">Model *</label>
+                    <input type="text" id="model" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="year">Year *</label>
+                    <input type="number" id="year" min="1900" max="2100" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="vehicleNumber">Vehicle Number *</label>
+                    <input type="text" id="vehicleNumber" required placeholder="e.g., ABC-1234">
+                </div>
+                
+                <div class="form-group">
+                    <label for="color">Color *</label>
+                    <input type="text" id="color" required placeholder="e.g., Red, Blue, White">
+                </div>
+                
+                <div class="form-group">
+                    <label for="chassisNumber">Chassis Number *</label>
+                    <input type="text" id="chassisNumber" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="engineNumber">Engine Number *</label>
+                    <input type="text" id="engineNumber" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="purchasePrice">Purchase Price *</label>
+                    <input type="number" id="purchasePrice" step="0.01" min="0.01" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes">Notes</label>
+                    <textarea id="notes" rows="3"></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" id="saveWheelBtn">Add Wheel</button>
+                    <button type="button" id="cancelWheelBtn" style="display: none;">Cancel</button>
+                </div>
+            </form>
+
+            <!-- Wheels List -->
+            <div class="wheels-list">
+                <h3>Inventory</h3>
+                <div id="wheelsContainer"></div>
+            </div>
+        </section>
+
+        <!-- Sales Section -->
+        <section id="sales" class="sales-section">
+            <h2>Sales</h2>
+            
+            <!-- Sell Wheel Form -->
+            <form id="saleForm" class="form">
+                <div class="form-group">
+                    <label for="wheelSelect">Select Wheel *</label>
+                    <select id="wheelSelect" required>
+                        <option value="">-- Select a wheel --</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sellingPrice">Selling Price *</label>
+                    <input type="number" id="sellingPrice" step="0.01" min="0.01" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="paymentMethod">Payment Method *</label>
+                    <select id="paymentMethod" required>
+                        <option value="">-- Select payment method --</option>
+                        <option value="Ready Cash">Ready Cash</option>
+                        <option value="Finance (Leasing)">Finance (Leasing)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="buyerName">Buyer Name *</label>
+                    <input type="text" id="buyerName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="buyerAddress">Buyer Address *</label>
+                    <textarea id="buyerAddress" rows="2" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="buyerNIC">Buyer NIC Number *</label>
+                    <input type="text" id="buyerNIC" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="buyerPhone">Buyer Phone Number *</label>
+                    <input type="tel" id="buyerPhone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="saleDate">Sale Date *</label>
+                    <input type="date" id="saleDate" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="saleNotes">Sale Notes</label>
+                    <textarea id="saleNotes" rows="2"></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit">Record Sale</button>
+                </div>
+            </form>
+
+            <!-- Sales List -->
+            <div class="sales-list">
+                <h3>Recent Sales</h3>
+                <div id="salesContainer"></div>
+            </div>
+            
+            <!-- Bill Generation Section -->
+            <div class="bill-section" id="billSection" style="display: none;">
+                <h3>Generate Bill</h3>
+                <div class="bill-actions">
+                    <button type="button" id="downloadBillBtn" class="bill-btn">Download PDF</button>
+                    <button type="button" id="printBillBtn" class="bill-btn">Print Bill</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reports Section -->
+        <section id="reports" class="reports-section">
+            <h2>Sales Report</h2>
+            
+            <!-- Admin Toggle Section -->
+            <div class="admin-section-inline">
+                <label class="toggle-label">
+                    <input type="checkbox" id="adminToggle">
+                    <span>Show purchase prices in reports</span>
+                </label>
+            </div>
+            
+            <!-- Date Filters -->
+            <div class="report-filters">
+                <div class="form-group">
+                    <label for="reportFromDate">From Date</label>
+                    <input type="date" id="reportFromDate">
+                </div>
+                
+                <div class="form-group">
+                    <label for="reportToDate">To Date</label>
+                    <input type="date" id="reportToDate">
+                </div>
+                
+                <div class="form-group report-buttons">
+                    <label>Actions</label>
+                    <div class="report-button-group">
+                        <button type="button" id="filterReportBtn">Filter Report</button>
+                        <button type="button" id="exportCSVBtn">Export to<br>CSV</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report Table -->
+            <div class="report-table-container">
+                <table id="reportTable">
+                    <thead>
+                        <tr>
+                            <th>Model</th>
+                            <th>Selling Price</th>
+                            <th class="purchase-price-col" style="display: none;">Purchase Price</th>
+                            <th>Profit</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reportTableBody">
+                    </tbody>
+                    <tfoot id="reportTableFooter">
+                    </tfoot>
+                </table>
+            </div>
+        </section>
+
+        <!-- Backup & Reset Section -->
+        <section id="backup" class="backup-section">
+            <h2>Data Management</h2>
+            <div class="backup-actions">
+                <button type="button" id="exportJSONBtn">Export JSON Backup</button>
+                <button type="button" id="importJSONBtn">Import JSON Backup</button>
+                <input type="file" id="importFileInput" accept=".json" style="display: none;">
+                <button type="button" id="resetDemoBtn" class="danger">Reset Demo Data</button>
+            </div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
